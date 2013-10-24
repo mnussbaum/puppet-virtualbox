@@ -8,5 +8,11 @@ describe 'virtualbox' do
       :provider => 'pkgdmg',
       :require  => 'Exec[Kill Virtual Box Processes]',
     })
+
+    should contain_exec('Kill Virtual Box Processes').with({
+      :command      => 'pkill "VBoxXPCOMIPCD" || true && pkill "VBoxSVC" || true && pkill "VBoxHeadless" || true',
+      :path         => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
+      :onlyif       => 'ps aux | grep "VBoxXPCOMIPCD\|VBoxSVC\|VBoxHeadless" | grep -v "grep"'
+    })
   end
 end
